@@ -1,16 +1,17 @@
 import { TouchableOpacity, Text } from "react-native";
 import { colours } from "../colours";
 
-const ServiceCard = ({ text = "Products" }) => {
+const ServiceCard = ({ text = "Products", active = false, onPress }) => {
   return (
     <TouchableOpacity
+      onPress={onPress}
       activeOpacity={0.7}
       style={{
         padding: 10,
         shadowColor: "black",
-        backgroundColor: colours.primary_variant,
+        backgroundColor: active ? colours.bg : colours.primary_variant,
         borderWidth: 1,
-        borderColor: "transparent",
+        borderColor: active ? colours.primary : "transparent",
         height: 47,
         borderRadius: 8,
         marginHorizontal: 8,
@@ -22,9 +23,9 @@ const ServiceCard = ({ text = "Products" }) => {
     >
       <Text
         style={{
-          color: colours.bg,
+          color: active ? colours.primary : colours.bg,
           fontSize: 17,
-          fontWeight: "400",
+          fontWeight: active ? "bold" : "400",
           textTransform: "uppercase",
         }}
       >
