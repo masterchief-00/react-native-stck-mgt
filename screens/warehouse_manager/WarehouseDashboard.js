@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 
 import { colours } from "../../colours";
-import CategorySelector from "../../components/CategorySelector";
-import ProductCard from "../../components/ProductCard";
+import Products from "../../components/Products";
 import ServiceCard from "../../components/ServiceCard";
+import Shipping from "../../components/Shipping";
 import User from "../../components/User";
+import CategorySelector from "../../components/CategorySelector";
 
 const WarehouseDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
@@ -48,21 +49,9 @@ const WarehouseDashboard = () => {
             text="Update products"
           />
         </ScrollView>
-        <CategorySelector />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{ paddingHorizontal: 15, marginTop: 10 }}
-          fadingEdgeLength={100}
-          endFillColor="transparent"
-        >
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </ScrollView>
+        {activeTab === "products" && <CategorySelector />}
+        {activeTab === "products" && <Products />}
+        {activeTab === "shipping" && <Shipping />}
       </View>
     </View>
   );
