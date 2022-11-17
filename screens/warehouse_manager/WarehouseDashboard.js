@@ -9,6 +9,7 @@ import Shipping from "../../components/Shipping";
 import User from "../../components/User";
 import CategorySelector from "../../components/CategorySelector";
 import { useSelector } from "react-redux";
+import AddProduct from "../../components/AddProduct";
 
 const WarehouseDashboard = () => {
   const appTheme = useSelector((state) => state.theme.light);
@@ -26,9 +27,12 @@ const WarehouseDashboard = () => {
         <ScrollView
           contentContainerStyle={{
             justifyContent: "center",
-            alignItems: "center",
           }}
-          style={{ marginVertical: 5, padding: 5, height: 120 }}
+          style={{
+            marginVertical: 5,
+            padding: 5,
+            height: 90,
+          }}
           horizontal
           showsHorizontalScrollIndicator={false}
           fadingEdgeLength={100}
@@ -58,6 +62,7 @@ const WarehouseDashboard = () => {
         {activeTab === "products" && <CategorySelector />}
         {activeTab === "products" && <Products />}
         {activeTab === "orders" && <Shipping />}
+        {activeTab === "add_products" && <AddProduct />}
       </View>
     </View>
   );
