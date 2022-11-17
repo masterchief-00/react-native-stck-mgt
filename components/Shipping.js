@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView } from "react-native";
-import ProductCard from "./ProductCard";
+import OrderCard from "./OrderCard";
 
 const Shipping = () => {
   return (
@@ -10,13 +10,13 @@ const Shipping = () => {
       fadingEdgeLength={100}
       endFillColor="transparent"
     >
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
+      <OrderCard />
+      <OrderCard />
+      <OrderCard />
+      <OrderCard />
+      <OrderCard />
+      <OrderCard />
+      <OrderCard />
     </ScrollView>
   );
 };

@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import avatar from "../assets/images/avatar.jpg";
 import { colours } from "../colours";
+import { useDispatch, useSelector } from "react-redux";
+import { ThemeActions } from "../redux/appThemeSlice";
 
 const User = () => {
+  const appTheme = useSelector((state) => state.theme.light);
+  const dispatch = useDispatch();
+
+  const handleTheme = (value) => {
+    dispatch(ThemeActions.setTheme(value));
+  };
+
   const userName = "John Doe";
   const userType = "Warehouse manager";
+
+  // useEffect(() => {
+  //   console.log(appTheme);
+  // }, []);
   return (
     <View
       style={{
@@ -18,7 +31,7 @@ const User = () => {
       }}
     >
       <TouchableOpacity
-        onPress={() => navigation.navigate("User")}
+        // onPress={() => navigation.navigate("User")}
         activeOpacity={0.8}
         style={{ flexDirection: "row", alignItems: "center" }}
       >
@@ -50,7 +63,27 @@ const User = () => {
           </Text>
         </View>
       </TouchableOpacity>
-
+      <View>
+        {appTheme ? (
+          <TouchableOpacity
+            onPress={() => handleTheme(false)}
+            activeOpacity={0.5}
+          >
+            <MaterialCommunityIcons
+              name="weather-night"
+              size={24}
+              color={colours.primary}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => handleTheme(true)}
+            activeOpacity={0.5}
+          >
+            <Feather name="sun" size={24} color={colours.primary} />
+          </TouchableOpacity>
+        )}
+      </View>
       <TouchableOpacity
         style={{ flexDirection: "row-reverse", alignItems: "center" }}
       >

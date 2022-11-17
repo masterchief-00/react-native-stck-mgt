@@ -8,12 +8,18 @@ import ServiceCard from "../../components/ServiceCard";
 import Shipping from "../../components/Shipping";
 import User from "../../components/User";
 import CategorySelector from "../../components/CategorySelector";
+import { useSelector } from "react-redux";
 
 const WarehouseDashboard = () => {
+  const appTheme = useSelector((state) => state.theme.light);
+
   const [activeTab, setActiveTab] = useState("products");
   return (
-    <View style={{ flex: 1, backgroundColor: colours.bg }}>
-      <StatusBar style="dark" backgroundColor="transparent" />
+    <View style={{ flex: 1, backgroundColor: appTheme ? colours.bg : "black" }}>
+      <StatusBar
+        style={appTheme ? "dark" : "light"}
+        backgroundColor="transparent"
+      />
 
       <View style={{ marginTop: "8%", flex: 1 }}>
         <User />
@@ -34,9 +40,9 @@ const WarehouseDashboard = () => {
             text="Products"
           />
           <ServiceCard
-            onPress={() => setActiveTab("shipping")}
-            active={activeTab === "shipping" ? true : false}
-            text="Shipping"
+            onPress={() => setActiveTab("orders")}
+            active={activeTab === "orders" ? true : false}
+            text="Orders"
           />
           <ServiceCard
             onPress={() => setActiveTab("add_products")}
@@ -51,7 +57,7 @@ const WarehouseDashboard = () => {
         </ScrollView>
         {activeTab === "products" && <CategorySelector />}
         {activeTab === "products" && <Products />}
-        {activeTab === "shipping" && <Shipping />}
+        {activeTab === "orders" && <Shipping />}
       </View>
     </View>
   );
