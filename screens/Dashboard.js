@@ -2,16 +2,17 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 
-import { colours } from "../../colours";
-import Products from "../../components/Products";
-import ServiceCard from "../../components/ServiceCard";
-import Shipping from "../../components/Shipping";
-import User from "../../components/User";
-import CategorySelector from "../../components/CategorySelector";
+import { colours } from "../colours";
+import Products from "../components/Products";
+import ServiceCard from "../components/ServiceCard";
+import Shipping from "../components/Shipping";
+import User from "../components/User";
+import CategorySelector from "../components/CategorySelector";
 import { useSelector } from "react-redux";
-import AddProduct from "../../components/AddProduct";
+import AddProduct from "../components/AddProduct";
+import UpdateProduct from "../components/UpdateProduct";
 
-const WarehouseDashboard = () => {
+const Dashboard = () => {
   const appTheme = useSelector((state) => state.theme.light);
 
   const [activeTab, setActiveTab] = useState("products");
@@ -63,9 +64,10 @@ const WarehouseDashboard = () => {
         {activeTab === "products" && <Products />}
         {activeTab === "orders" && <Shipping />}
         {activeTab === "add_products" && <AddProduct />}
+        {activeTab === "update_products" && <UpdateProduct />}
       </View>
     </View>
   );
 };
 
-export default WarehouseDashboard;
+export default Dashboard;

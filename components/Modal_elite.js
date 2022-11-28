@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { colours } from "../colours";
-import ProductCard from "./ProductCard";
+import OrderItemCard from "./OrderItemCard";
 
 const Modal_elite = ({ product_img, type = "product" }) => {
   const data = {
@@ -132,15 +132,18 @@ const Modal_elite = ({ product_img, type = "product" }) => {
             fadingEdgeLength={100}
             style={{ padding: 10 }}
           >
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
-            <ProductCard type="order" />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+            <OrderItemCard />
+
           </ScrollView>
           <View
             style={{

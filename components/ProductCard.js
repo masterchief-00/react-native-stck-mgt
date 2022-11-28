@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
-import { EvilIcons, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import Modal_elite from "./Modal_elite";
 
-const ProductCard = ({ type = "product" }) => {
+const ProductCard = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -22,8 +22,8 @@ const ProductCard = ({ type = "product" }) => {
         source={product_img}
         resizeMode="stretch"
         style={{
-          height: type === "order" ? 60 : 80,
-          width: type === "order" ? 100 : 120,
+          height: 80,
+          width: 120,
           borderRadius: 5,
         }}
       />
@@ -39,7 +39,7 @@ const ProductCard = ({ type = "product" }) => {
           <Text
             style={{
               fontWeight: "bold",
-              color: type === "order" ? colours.bg : colours.primary_variant,
+              color: colours.primary_variant,
             }}
           >
             HP Printer
@@ -49,7 +49,7 @@ const ProductCard = ({ type = "product" }) => {
               fontSize: 13,
               fontWeight: "300",
               opacity: 1,
-              color: type === "order" ? colours.bg : colours.primary_variant_x,
+              color: colours.primary_variant_x,
               fontStyle: "italic",
             }}
           >
@@ -60,7 +60,7 @@ const ProductCard = ({ type = "product" }) => {
               fontSize: 13,
               fontWeight: "500",
               opacity: 1,
-              color: type === "order" ? colours.bg : colours.primary_variant_x,
+              color: colours.primary_variant_x,
             }}
           >
             157 in stock
@@ -69,23 +69,13 @@ const ProductCard = ({ type = "product" }) => {
         <View>
           <Text
             style={{
-              color: type === "order" ? colours.bg : colours.primary_variant,
+              color: colours.primary_variant,
               fontWeight: "bold",
               fontSize: 18,
             }}
           >
             $690
           </Text>
-          {!type === "order" && (
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <EvilIcons
-                name="external-link"
-                size={28}
-                color={colours.primary_variant}
-                style={{ marginTop: 15, marginLeft: 15 }}
-              />
-            </TouchableOpacity>
-          )}
         </View>
       </View>
       <Modal

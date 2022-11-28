@@ -7,13 +7,14 @@ const CustomButton = ({
   text,
   bg = colours.primary,
   color = colours.bg,
+  width = 80,
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
         backgroundColor: bg,
-        width: 80,
+        width: width,
         padding: 10,
         height: 45,
         alignItems: "center",

@@ -2,11 +2,13 @@ import { Formik } from "formik";
 import React, { useState } from "react";
 import { View, TextInput, Text } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
+import { useSelector } from "react-redux";
 import { colours } from "../colours";
 import CustomButton from "./CustomButton";
 
-const AddProduct = () => {
+const UpdateProduct = () => {
   const [selected, setSelected] = useState("");
+  const appTheme = useSelector((state) => state.theme.light);
 
   const data = [
     { key: "1", value: "Mobiles", disabled: true },
@@ -21,7 +23,7 @@ const AddProduct = () => {
     <View style={{ marginBottom: "30%" }}>
       <Text
         style={{
-          color: colours.primary_variant,
+          color: appTheme ? colours.primary_variant : colours.primary,
           textTransform: "uppercase",
           marginLeft: "15%",
           marginBottom: 10,
@@ -44,7 +46,7 @@ const AddProduct = () => {
               style={{
                 color: colours.primary_variant_x,
                 textAlign: "left",
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
                 fontSize: 15,
                 width: 250,
                 height: 40,
@@ -63,7 +65,7 @@ const AddProduct = () => {
               style={{
                 color: colours.primary_variant_x,
                 textAlign: "left",
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
                 fontSize: 15,
                 width: 250,
                 height: 40,
@@ -83,7 +85,7 @@ const AddProduct = () => {
               style={{
                 color: colours.primary_variant_x,
                 textAlign: "left",
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
                 fontSize: 15,
                 width: 250,
                 height: 40,
@@ -103,7 +105,7 @@ const AddProduct = () => {
               style={{
                 color: colours.primary_variant_x,
                 textAlign: "left",
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
                 fontSize: 15,
                 width: 250,
                 height: 40,
@@ -123,7 +125,7 @@ const AddProduct = () => {
               style={{
                 color: colours.primary_variant_x,
                 textAlign: "left",
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
                 fontSize: 15,
                 width: 250,
                 height: 40,
@@ -143,7 +145,7 @@ const AddProduct = () => {
               style={{
                 color: colours.primary_variant_x,
                 textAlign: "left",
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
                 fontSize: 15,
                 width: 250,
                 height: 40,
@@ -159,6 +161,7 @@ const AddProduct = () => {
               save="key"
               label="Categories"
               placeholder="Category"
+              
               labelStyles={{
                 color: colours.primary_variant,
               }}
@@ -181,7 +184,7 @@ const AddProduct = () => {
                 color: colours.bg,
               }}
               disabledItemStyles={{
-                backgroundColor: colours.bg,
+                backgroundColor: appTheme ? colours.bg : colours.black,
               }}
               disabledTextStyles={{
                 color: colours.bg_variant,
@@ -192,17 +195,17 @@ const AddProduct = () => {
             />
             <View style={{ flexDirection: "row" }}>
               <CustomButton
-                text="Submit"
+                text="Update"
+                width={110}
                 onPress={handleSubmit}
                 title="Submit"
               />
               <CustomButton
                 text="Clear form"
-                width={125}
+                width={110}
                 bg={colours.bg}
                 color={colours.primary_variant}
                 onPress={handleSubmit}
-                title="Submit"
               />
             </View>
           </View>
@@ -212,4 +215,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;
