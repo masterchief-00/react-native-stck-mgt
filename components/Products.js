@@ -1,8 +1,36 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import { ScrollView } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "./ProductCard";
+import { API_URL } from "@env";
+import { ProductActions } from "../redux/ProductSlice";
 
 const Products = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.product.products);
+  const token = useSelector((state) => state.user.token);
+
+  const fetchProducts = async () => {
+    await axios({
+      method: "get",
+      url: `${API_URL}/products`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(
+            ProductActions.setProducts({ list: response.data.products })
+          );
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -10,13 +38,9 @@ const Products = () => {
       fadingEdgeLength={100}
       endFillColor="transparent"
     >
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
     </ScrollView>
   );
 };

@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView } from "react-native";
 import { colours } from "../colours";
 import OrderItemCard from "./OrderItemCard";
 
-const Modal_elite = ({ product_img, type = "product" }) => {
+const Modal_elite = ({ product_img, type = "product", items }) => {
   const data = {
     productName: "HP Printer",
     productCategory: "Electronics",
@@ -125,25 +125,16 @@ const Modal_elite = ({ product_img, type = "product" }) => {
               color: colours.bg,
             }}
           >
-            12 item(s)
+            {items.length} item(s)
           </Text>
           <ScrollView
             endFillColor="transparent"
             fadingEdgeLength={100}
             style={{ padding: 10 }}
           >
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-            <OrderItemCard />
-
+            {items.map((element) => (
+              <OrderItemCard data={element} key={element.id} />
+            ))}
           </ScrollView>
           <View
             style={{

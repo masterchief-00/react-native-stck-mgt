@@ -1,9 +1,27 @@
-import { View, Text,Image } from "react-native";
+import { useEffect } from "react";
+import { View, Text, Image } from "react-native";
+import { useSelector } from "react-redux";
 import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
 
+const OrderItemCard = ({ data }) => {
+  const products = useSelector((state) => state.product.products);
+  const categories = useSelector((state) => state.category.categories);
+  let product = null;
 
-const OrderItemCard = () => {
+  const findProduct = (product_id) => {
+    product = products.find((item) => item.id === product_id);
+  };
+
+  const findCategories = (category_id) => {
+    let category = categories.find((item) => item.id === category_id);
+
+    return category.name;
+  };
+
+  useEffect(() => {
+    findProduct(data.product_id);
+  }, []);
   return (
     <View
       style={{
@@ -38,7 +56,7 @@ const OrderItemCard = () => {
               color: colours.bg,
             }}
           >
-            HP Printer
+            {product.name}
           </Text>
           <Text
             style={{
@@ -49,9 +67,8 @@ const OrderItemCard = () => {
               fontStyle: "italic",
             }}
           >
-            Electronics
+            {findCategories(product.category_id)}
           </Text>
-          
         </View>
         <View>
           <Text

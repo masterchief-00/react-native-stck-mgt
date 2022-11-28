@@ -15,6 +15,7 @@ const ServiceCard = ({ text = "Products", active = false, onPress }) => {
         height: 47,
         borderRadius: 8,
         marginHorizontal: 8,
+        marginVertical: 10,
         shadowOpacity: 1,
         shadowRadius: 15,
         shadowOffset: { height: 10, width: 10 },

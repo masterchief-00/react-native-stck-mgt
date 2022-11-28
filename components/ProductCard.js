@@ -4,10 +4,17 @@ import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
 import { AntDesign } from "@expo/vector-icons";
 import Modal_elite from "./Modal_elite";
+import { useSelector } from "react-redux";
 
-const ProductCard = () => {
+const ProductCard = ({ product }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const categories = useSelector((state) => state.category.categories);
 
+  const findCategories = (category_id) => {
+    let category = categories.find((item) => item.id === category_id);
+
+    return category.name;
+  };
   return (
     <View
       style={{
@@ -42,7 +49,7 @@ const ProductCard = () => {
               color: colours.primary_variant,
             }}
           >
-            HP Printer
+            {product.name}
           </Text>
           <Text
             style={{
@@ -53,7 +60,7 @@ const ProductCard = () => {
               fontStyle: "italic",
             }}
           >
-            Electronics
+            {findCategories(product.category_id)}
           </Text>
           <Text
             style={{
@@ -63,7 +70,7 @@ const ProductCard = () => {
               color: colours.primary_variant_x,
             }}
           >
-            157 in stock
+            {product.quantity} in stock
           </Text>
         </View>
         <View>
@@ -74,7 +81,7 @@ const ProductCard = () => {
               fontSize: 18,
             }}
           >
-            $690
+            ${product.unit_price}
           </Text>
         </View>
       </View>

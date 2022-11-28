@@ -5,21 +5,49 @@ import avatar from "../assets/images/avatar.jpg";
 import { colours } from "../colours";
 import { useDispatch, useSelector } from "react-redux";
 import { ThemeActions } from "../redux/appThemeSlice";
+import { API_URL } from "@env";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const User = () => {
   const appTheme = useSelector((state) => state.theme.light);
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  const token = useSelector((state) => state.user.token);
+  const navigation = useNavigation();
 
   const handleTheme = (value) => {
     dispatch(ThemeActions.setTheme(value));
   };
 
-  const userName = "John Doe";
-  const userType = "Warehouse manager";
+  const userName = userData.name;
+  const userType =
+    userData.user_type === "DLV"
+      ? "Shipping manager"
+      : userData.user_type === "WHS"
+      ? "Warehouse manager"
+      : userData.user_type === "DRV"
+      ? "Driver"
+      : userData.user_type === "ADM"
+      ? "Administrator"
+      : "Customer";
 
-  // useEffect(() => {
-  //   console.log(appTheme);
-  // }, []);
+  const handleLogout = async () => {
+    await axios({
+      method: "post",
+      url: `${API_URL}/logout`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          navigation.navigate("Login");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <View
       style={{
@@ -47,6 +75,7 @@ const User = () => {
               fontSize: 18,
               fontWeight: "bold",
               marginLeft: 10,
+              textTransform: "capitalize",
             }}
           >
             {userName}
@@ -86,6 +115,7 @@ const User = () => {
       </View>
       <TouchableOpacity
         style={{ flexDirection: "row-reverse", alignItems: "center" }}
+        onPress={handleLogout}
       >
         <Text
           style={{

@@ -5,8 +5,15 @@ import { colours } from "../colours";
 import LottieView from "lottie-react-native";
 import { Formik } from "formik";
 import CustomButton from "../components/CustomButton";
+import { API_URL } from "@env";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { UserActions } from "../redux/UserSlice";
+import { CategoryActions } from "../redux/CategorySlice";
 
 export default function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   return (
     <View style={{ flex: 1, backgroundColor: colours.bg }}>
       <StatusBar style="light" backgroundColor={colours.primary} />
@@ -54,8 +61,46 @@ export default function LoginScreen({ navigation }) {
           }}
         >
           <Formik
-            initialValues={{ email: "" }}
-            onSubmit={(values) => console.log(values)}
+            initialValues={{ email: "", password: "" }}
+            onSubmit={async (values) => {
+              await axios({
+                method: "post",
+                url: `${API_URL}/login`,
+                data: {
+                  email: values.email,
+                  password: values.password,
+                },
+              })
+                .then((response) => {
+                  if (response.status === 200) {
+                    // console.log(response.data.permissions);
+                    dispatch(
+                      UserActions.setUserData({
+                        name: response.data.user.name,
+                        email: response.data.user.email,
+                        user_type: response.data.user.user_type,
+                        ID_NO: response.data.user.ID_NO,
+                        phone: response.data.user.phone,
+                      })
+                    );
+                    dispatch(UserActions.setToken(response.data.token));
+                    dispatch(
+                      UserActions.setPermissions({
+                        list: response.data.permissions,
+                      })
+                    );
+                    dispatch(
+                      CategoryActions.setCategories({
+                        list: response.data.categories,
+                      })
+                    );
+                    navigation.navigate("Dashboard");
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }}
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
               <View

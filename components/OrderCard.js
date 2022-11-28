@@ -1,12 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
 import { EvilIcons, AntDesign } from "@expo/vector-icons";
 import Modal_elite from "./Modal_elite";
+import { useDispatch, useSelector } from "react-redux";
+import { API_URL } from "@env";
+import axios from "axios";
+import { OrdersActions } from "../redux/OrderSlice";
 
-const OrderCard = () => {
+const OrderCard = ({ order }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [itemsCount, setItemsCount] = useState(0);
+  const dispatch = useDispatch();
+  const orderItems = useSelector((state) => state.order.orderItems);
+  const token = useSelector((state) => state.user.token);
+
+  let filtered_items = [];
+
+  const countItems = (id) => {
+    let i = 0;
+    for (let item of orderItems) {
+      if (item.order_id === id) {
+        // if (!filtered_items.find((element) => element.id === id)) {
+        //   filtered_items.push(item);
+        // }
+        filtered_items.push(item);
+
+        i++;
+      } else {
+        continue;
+      }
+    }
+    setItemsCount(i);
+    console.log(filtered_items.length);
+  };
+
+  const fetchItems = async () => {
+    await axios({
+      method: "get",
+      url: `${API_URL}/orderItems/find/${order.id}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(
+            OrdersActions.setOrderItems({ list: response.data.orderItems })
+          );
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchItems();
+    countItems(order.id);
+  }, []);
 
   return (
     <View
@@ -34,28 +83,33 @@ const OrderCard = () => {
               color: colours.primary_variant,
             }}
           >
-            #5676
+            #{order.id}
           </Text>
 
           <Text
+            numberOfLines={2}
             style={{
               fontSize: 15,
               fontWeight: "800",
               opacity: 1,
-              color: colours.primary_variant_x,
+              color: colours.primary_variant,
+              textTransform: "capitalize",
+              maxWidth: 80,
             }}
           >
-            Jane Doe
+            {order.names}
           </Text>
           <Text
+            numberOfLines={1}
             style={{
               fontSize: 13,
               fontWeight: "600",
               opacity: 1,
               color: colours.primary_variant_x,
+              width: 80,
             }}
           >
-            12/05/2022
+            {order.created_at}
           </Text>
         </View>
         <View>
@@ -68,7 +122,7 @@ const OrderCard = () => {
               marginBottom: 5,
             }}
           >
-            12 item(s)
+            {itemsCount} item(s)
           </Text>
           <Text
             style={{
@@ -79,7 +133,7 @@ const OrderCard = () => {
               marginBottom: 5,
             }}
           >
-            PayPal
+            {order.phone}
           </Text>
           <Text
             style={{
@@ -88,28 +142,30 @@ const OrderCard = () => {
               opacity: 1,
               color: colours.primary_variant_x,
               marginBottom: 5,
+              textTransform: "capitalize",
             }}
           >
-            Kigali, Rwanda
+            {order.province}, {order.district}
           </Text>
         </View>
-        <View>
+        <View style={{ alignItems: "flex-start" }}>
           <Text
+            numberOfLines={1}
             style={{
               color: colours.primary_variant,
               fontWeight: "bold",
-              fontSize: 18,
+              fontSize: 13,
+              textAlign: "left",
             }}
           >
-            $690
+            ${order.total}
           </Text>
-
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <EvilIcons
               name="external-link"
               size={28}
               color={colours.primary_variant}
-              style={{ marginTop: 15, marginLeft: 15 }}
+              style={{ marginTop: 15, marginLeft: "5%" }}
             />
           </TouchableOpacity>
         </View>
@@ -150,7 +206,7 @@ const OrderCard = () => {
                 textTransform: "uppercase",
               }}
             >
-              Order #4534
+              Order #{order.id}
             </Text>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <AntDesign
@@ -160,7 +216,11 @@ const OrderCard = () => {
               />
             </TouchableOpacity>
           </View>
-          <Modal_elite type="order" product_img={product_img} />
+          <Modal_elite
+            items={filtered_items}
+            type="order"
+            product_img={product_img}
+          />
         </View>
       </Modal>
     </View>
