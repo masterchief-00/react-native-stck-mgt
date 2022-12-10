@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
+import { useSelector } from "react-redux";
 import { colours } from "../colours";
 import OrderItemCard from "./OrderItemCard";
 
-const Modal_elite = ({ product_img, type = "product", items }) => {
+const Modal_elite = ({ product_img, type = "product", order_id }) => {
   const data = {
     productName: "HP Printer",
     productCategory: "Electronics",
@@ -12,6 +13,22 @@ const Modal_elite = ({ product_img, type = "product", items }) => {
     productSKU: "EL-PR-123",
   };
 
+  const orderItems = useSelector((state) => state.order.orderItems);
+  const [filtered_items, setItems] = useState([]);
+
+  const loadItems = (id) => {
+    for (let item of orderItems) {
+      if (item.order_id === id) {
+        filtered_items.push(item);
+      } else {
+        continue;
+      }
+    }
+  };
+
+  useEffect(() => {
+    loadItems(order_id);
+  }, []);
   return (
     <View
       style={{
@@ -113,6 +130,7 @@ const Modal_elite = ({ product_img, type = "product", items }) => {
           </View>
         </View>
       )}
+
       {type === "order" && (
         <View style={{ alignItems: "center" }}>
           <Text
@@ -125,14 +143,14 @@ const Modal_elite = ({ product_img, type = "product", items }) => {
               color: colours.bg,
             }}
           >
-            {items.length} item(s)
+            {filtered_items.length} item(s)
           </Text>
           <ScrollView
             endFillColor="transparent"
             fadingEdgeLength={100}
             style={{ padding: 10 }}
           >
-            {items.map((element) => (
+            {filtered_items.map((element) => (
               <OrderItemCard data={element} key={element.id} />
             ))}
           </ScrollView>

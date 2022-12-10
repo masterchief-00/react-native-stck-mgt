@@ -9,6 +9,7 @@ import { ProductActions } from "../redux/ProductSlice";
 const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
+  const filtered = useSelector((state) => state.product.filtered);
   const token = useSelector((state) => state.user.token);
 
   const fetchProducts = async () => {
@@ -38,9 +39,13 @@ const Products = () => {
       fadingEdgeLength={100}
       endFillColor="transparent"
     >
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+      {filtered.length === 0
+        ? products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        : filtered.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
     </ScrollView>
   );
 };

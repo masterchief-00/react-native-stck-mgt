@@ -22,18 +22,13 @@ const OrderCard = ({ order }) => {
     let i = 0;
     for (let item of orderItems) {
       if (item.order_id === id) {
-        // if (!filtered_items.find((element) => element.id === id)) {
-        //   filtered_items.push(item);
-        // }
         filtered_items.push(item);
-
         i++;
       } else {
         continue;
       }
     }
     setItemsCount(i);
-    console.log(filtered_items.length);
   };
 
   const fetchItems = async () => {
@@ -217,7 +212,7 @@ const OrderCard = ({ order }) => {
             </TouchableOpacity>
           </View>
           <Modal_elite
-            items={filtered_items}
+            order_id={order.id}
             type="order"
             product_img={product_img}
           />

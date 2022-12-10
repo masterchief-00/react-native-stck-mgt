@@ -4,6 +4,7 @@ const ProductSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
+    filtered: [],
   },
   reducers: {
     setProducts(state, action) {
@@ -14,6 +15,11 @@ const ProductSlice = createSlice({
           continue;
         }
       }
+    },
+    filterProductsByCategory(state, action) {
+      state.filtered = state.products.filter(
+        (item) => item.category_id === action.payload
+      );
     },
   },
 });

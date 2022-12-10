@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
       }}
     >
       <Image
-        source={product_img}
+        source={{uri:product.image}}
         resizeMode="stretch"
         style={{
           height: 80,

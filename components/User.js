@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { AntDesign, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
-import avatar from "../assets/images/avatar.jpg";
 import { colours } from "../colours";
 import { useDispatch, useSelector } from "react-redux";
 import { ThemeActions } from "../redux/appThemeSlice";
@@ -13,6 +12,7 @@ const User = () => {
   const appTheme = useSelector((state) => state.theme.light);
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const userImage = userData.image;
   const token = useSelector((state) => state.user.token);
   const navigation = useNavigation();
 
@@ -21,6 +21,11 @@ const User = () => {
   };
 
   const userName = userData.name;
+  const avatar =
+    userImage !== null
+      ? { uri: userImage }
+      : require("../assets/images/avatar.jpg");
+
   const userType =
     userData.user_type === "DLV"
       ? "Shipping manager"
@@ -59,13 +64,18 @@ const User = () => {
       }}
     >
       <TouchableOpacity
-        // onPress={() => navigation.navigate("User")}
         activeOpacity={0.8}
         style={{ flexDirection: "row", alignItems: "center" }}
       >
         <Image
           source={avatar}
-          style={{ borderRadius: 50, height: 40, width: 40 }}
+          style={{
+            borderRadius: 50,
+            height: 40,
+            width: 40,
+            borderColor: colours.primary_variant,
+            borderWidth: 1,
+          }}
           resizeMode="contain"
         />
         <View>

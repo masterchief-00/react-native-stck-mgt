@@ -1,24 +1,37 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
-import { MultipleSelectList } from "react-native-dropdown-select-list";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
+import { useDispatch, useSelector } from "react-redux";
 import { colours } from "../colours";
+import { ProductActions } from "../redux/ProductSlice";
 
 const CategorySelector = () => {
   const [selected, setSelected] = useState("");
+  const categories = useSelector((state) => state.category.categories);
+  const dispatch = useDispatch();
 
-  const data = [
-    { key: "1", value: "Mobiles", disabled: true },
-    { key: "2", value: "Appliances" },
-    { key: "3", value: "Cameras" },
-    { key: "4", value: "Computers", disabled: true },
-    { key: "5", value: "Vegetables" },
-    { key: "6", value: "Diary Products" },
-    { key: "7", value: "Drinks" },
-  ];
+  let data = [];
+
+  const filterProducts = (id) => {
+    dispatch(ProductActions.filterProductsByCategory(id));
+  };
+  useEffect(() => {
+    for (let item of categories) {
+      let existing = data.find((ele) => ele.key === item.id);
+      if (!existing) {
+        let obj = { key: item.id, value: item.name };
+        data.push(obj);
+      }
+    }
+  }, []);
+
   return (
     <View style={{ paddingHorizontal: 12 }}>
-      <MultipleSelectList
-        setSelected={(val) => setSelected(val)}
+      <SelectList
+        setSelected={(val) => {
+          setSelected(val);
+          filterProducts(val);
+        }}
         data={data}
         save="key"
         label="Categories"

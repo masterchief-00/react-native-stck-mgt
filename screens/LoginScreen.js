@@ -81,6 +81,7 @@ export default function LoginScreen({ navigation }) {
                         user_type: response.data.user.user_type,
                         ID_NO: response.data.user.ID_NO,
                         phone: response.data.user.phone,
+                        image: response.data.user.image,
                       })
                     );
                     dispatch(UserActions.setToken(response.data.token));
