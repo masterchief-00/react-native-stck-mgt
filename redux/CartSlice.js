@@ -13,13 +13,25 @@ const CartSlice = createSlice({
       let existingItem = state.cartItems.find((ele) => ele.id === product.id);
 
       if (existingItem) {
-        product.picks += 1;
+        existingItem.picks += 1;
       } else {
         Object.assign(product, { picks: 1 });
         state.cartItems.push(product);
       }
+    },
+    decreasePick(state, action) {
+      let item = action.payload.item;
+      let existingItem = state.cartItems.find((ele) => ele.id === item.id);
 
-      console.log(state.cartItems);
+      if (existingItem.picks > 0) existingItem.picks -= 1;
+    },
+    removeItemFromCart(state, action) {
+      state.cartItems = state.cartItems.filter(
+        (ele) => ele.id !== action.payload.id
+      );
+    },
+    clearCart(state, action) {
+      state.cartItems = [];
     },
   },
 });

@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
 import Modal_elite from "./Modal_elite";
 import { useDispatch, useSelector } from "react-redux";
 import { CartActions } from "../redux/CartSlice";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, cart = true }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const categories = useSelector((state) => state.category.categories);
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
 
   const findCategories = (category_id) => {
@@ -21,6 +22,13 @@ const ProductCard = ({ product }) => {
   const addItemToCart = (item) => {
     dispatch(CartActions.addToCart({ product: item }));
   };
+
+  const findCartPicks = (id) => {
+    let item = cartItems.find((ele) => ele.id === id);
+
+    return item ? item.picks : 0;
+  };
+
   return (
     <View
       style={{
@@ -78,40 +86,72 @@ const ProductCard = ({ product }) => {
           >
             {product.quantity} in stock
           </Text>
-          <TouchableOpacity
-            onPress={() => addItemToCart(product)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 40,
-              padding: 3,
-              borderWidth: 1,
-              borderColor: colours.primary,
-              borderRadius: 10,
-              marginTop: 10,
-            }}
-          >
-            <Entypo name="shopping-cart" size={20} color={colours.primary} />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableOpacity
+              onPress={() => addItemToCart(product)}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+                padding: 3,
+                borderWidth: 1,
+                borderColor: colours.primary,
+                borderRadius: 10,
+                marginTop: 10,
+              }}
+            >
+              <Entypo name="shopping-cart" size={20} color={colours.primary} />
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 15,
+                  left: 30,
+                  borderWidth: 1.5,
+                  borderColor: colours.primary,
+                  borderRadius: 40,
+                  backgroundColor: colours.primary,
+                  padding: 3,
+                  textAlign: "center",
+                  height: 22,
+                  color: colours.bg,
+                  fontWeight: "bold",
+                }}
+              >
+                {findCartPicks(product.id)}
+              </Text>
+            </TouchableOpacity>
+            {findCartPicks(product.id) > 0 && (
+              <TouchableOpacity
+                onPress={() =>
+                  dispatch(CartActions.decreasePick({ item: product }))
+                }
+                style={{
+                  marginHorizontal: 15,
+                  marginTop: 5,
+                }}
+              >
+                <Ionicons
+                  name="remove-circle-sharp"
+                  size={24}
+                  color={colours.primary}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {findCartPicks(product.id) > 0 && (
             <Text
               style={{
-                position: "absolute",
-                bottom: 15,
-                left: 30,
-                borderWidth: 1.5,
-                borderColor: colours.primary,
-                borderRadius: 40,
-                backgroundColor: colours.primary,
-                padding: 3,
-                textAlign: "center",
-                height: 22,
-                color: colours.bg,
+                color: colours.primary_variant,
+                fontSize: 13,
+                marginTop: 5,
                 fontWeight: "bold",
               }}
             >
-              {product.picks ? product.picks : 0}
+              Sub-total: ${findCartPicks(product.id) * product.unit_price}
             </Text>
-          </TouchableOpacity>
+          )}
         </View>
         <View>
           <Text
@@ -123,6 +163,19 @@ const ProductCard = ({ product }) => {
           >
             ${product.unit_price}
           </Text>
+          {cart && (
+            <TouchableOpacity
+              onPress={() =>
+                dispatch(CartActions.removeItemFromCart({ id: product.id }))
+              }
+              style={{
+                marginTop: 10,
+                justifyContent: "center",
+              }}
+            >
+              <FontAwesome name="trash" size={24} color={colours.primary} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <Modal

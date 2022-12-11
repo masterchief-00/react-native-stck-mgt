@@ -65,6 +65,13 @@ const Dashboard = () => {
                 text="Products"
               />
             )}
+            {findPermission("product:view") && (
+              <ServiceCard
+                onPress={() => setActiveTab("cart")}
+                active={activeTab === "cart" ? true : false}
+                text="cart"
+              />
+            )}
             {findPermission("order:view") && (
               <ServiceCard
                 onPress={() => setActiveTab("orders")}

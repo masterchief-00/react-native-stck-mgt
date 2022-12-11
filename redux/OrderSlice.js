@@ -25,6 +25,10 @@ const OrderSlice = createSlice({
         }
       }
     },
+    clearOrders(state, action) {
+      state.orderItems = [];
+      state.orders = [];
+    },
   },
 });
 

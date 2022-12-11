@@ -41,10 +41,10 @@ const Products = () => {
     >
       {filtered.length === 0
         ? products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} cart={false} product={product} />
           ))
         : filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} cart={false} product={product} />
           ))}
     </ScrollView>
   );

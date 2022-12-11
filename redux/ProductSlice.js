@@ -21,6 +21,10 @@ const ProductSlice = createSlice({
         (item) => item.category_id === action.payload
       );
     },
+    clearProducts(state, action) {
+      state.products = [];
+      state.filtered = [];
+    },
   },
 });
 

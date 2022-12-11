@@ -13,6 +13,11 @@ import { ThemeActions } from "../redux/appThemeSlice";
 import { API_URL } from "@env";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+import { CartActions } from "../redux/CartSlice";
+import { UserActions } from "../redux/UserSlice";
+import { ProductActions } from "../redux/ProductSlice";
+import { OrdersActions } from "../redux/OrderSlice";
 
 const User = () => {
   const appTheme = useSelector((state) => state.theme.light);
@@ -22,6 +27,7 @@ const User = () => {
   const token = useSelector((state) => state.user.token);
   const navigation = useNavigation();
   const [indicatorVisible, setIndicatorVisibility] = useState(false);
+  const isFocused = useIsFocused();
 
   const handleTheme = (value) => {
     dispatch(ThemeActions.setTheme(value));
@@ -54,6 +60,10 @@ const User = () => {
     })
       .then((response) => {
         if (response.status === 200) {
+          dispatch(CartActions.clearCart());
+          dispatch(UserActions.clearUserData());
+          dispatch(ProductActions.clearProducts());
+          dispatch(OrdersActions.clearOrders());
           navigation.navigate("Login");
         }
       })
@@ -61,10 +71,6 @@ const User = () => {
         console.log(error);
       });
   };
-
-  useEffect(() => {
-    console.log(userImage);
-  }, []);
 
   return (
     <View
