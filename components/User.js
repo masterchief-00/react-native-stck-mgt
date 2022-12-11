@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { AntDesign, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import { colours } from "../colours";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +21,7 @@ const User = () => {
   const userImage = userData.image;
   const token = useSelector((state) => state.user.token);
   const navigation = useNavigation();
+  const [indicatorVisible, setIndicatorVisibility] = useState(false);
 
   const handleTheme = (value) => {
     dispatch(ThemeActions.setTheme(value));
@@ -38,6 +45,8 @@ const User = () => {
       : "Customer";
 
   const handleLogout = async () => {
+    setIndicatorVisibility(true);
+
     await axios({
       method: "post",
       url: `${API_URL}/logout`,
@@ -52,6 +61,10 @@ const User = () => {
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    console.log(userImage);
+  }, []);
 
   return (
     <View
@@ -124,6 +137,7 @@ const User = () => {
         )}
       </View>
       <TouchableOpacity
+        disabled={indicatorVisible}
         style={{ flexDirection: "row-reverse", alignItems: "center" }}
         onPress={handleLogout}
       >
@@ -131,13 +145,24 @@ const User = () => {
           style={{
             fontWeight: "bold",
             fontSize: 10,
-            color: colours.primary,
+            color: indicatorVisible ? colours.bg_variant : colours.primary,
             marginHorizontal: 9,
           }}
         >
           LOG OUT
         </Text>
-        <AntDesign name="logout" size={20} color={colours.primary_variant} />
+        <AntDesign
+          name="logout"
+          size={20}
+          color={indicatorVisible ? colours.bg_variant : colours.primary}
+        />
+        {indicatorVisible && (
+          <ActivityIndicator
+            size="small"
+            color={colours.primary_variant_x}
+            style={{ marginRight: 10 }}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );

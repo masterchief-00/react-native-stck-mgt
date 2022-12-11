@@ -37,6 +37,17 @@ const UserSlice = createSlice({
         }
       }
     },
+    clearUserData(state, action) {
+      state.userData = {
+        name: "",
+        email: "",
+        ID_NO: "",
+        phone: "",
+        user_type: "",
+        image: null,
+      };
+      state.token = "";
+    },
   },
 });
 

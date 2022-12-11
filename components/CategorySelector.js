@@ -23,7 +23,7 @@ const CategorySelector = () => {
         data.push(obj);
       }
     }
-  }, []);
+  }, [selected]);
 
   return (
     <View style={{ paddingHorizontal: 12 }}>

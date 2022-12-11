@@ -8,12 +8,14 @@ const CustomButton = ({
   bg = colours.primary,
   color = colours.bg,
   width = 80,
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={onPress}
       style={{
-        backgroundColor: bg,
+        backgroundColor: disabled ? colours.bg_variant : bg,
         width: width,
         padding: 10,
         height: 45,

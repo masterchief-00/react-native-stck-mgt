@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import appThemeSlice from "./appThemeSlice";
+import CartSlice from "./CartSlice";
 import CategorySlice from "./CategorySlice";
 import OrderSlice from "./OrderSlice";
 import ProductSlice from "./ProductSlice";
@@ -12,6 +13,7 @@ const store = configureStore({
     product: ProductSlice.reducer,
     category: CategorySlice.reducer,
     order: OrderSlice.reducer,
+    cart: CartSlice.reducer,
   },
 });
 export default store;

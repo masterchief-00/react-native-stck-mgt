@@ -2,18 +2,24 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import Modal_elite from "./Modal_elite";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { CartActions } from "../redux/CartSlice";
 
 const ProductCard = ({ product }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const categories = useSelector((state) => state.category.categories);
+  const dispatch = useDispatch();
 
   const findCategories = (category_id) => {
     let category = categories.find((item) => item.id === category_id);
 
     return category.name;
+  };
+
+  const addItemToCart = (item) => {
+    dispatch(CartActions.addToCart({ product: item }));
   };
   return (
     <View
@@ -26,7 +32,7 @@ const ProductCard = ({ product }) => {
       }}
     >
       <Image
-        source={{uri:product.image}}
+        source={{ uri: product.image }}
         resizeMode="stretch"
         style={{
           height: 80,
@@ -72,6 +78,40 @@ const ProductCard = ({ product }) => {
           >
             {product.quantity} in stock
           </Text>
+          <TouchableOpacity
+            onPress={() => addItemToCart(product)}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 40,
+              padding: 3,
+              borderWidth: 1,
+              borderColor: colours.primary,
+              borderRadius: 10,
+              marginTop: 10,
+            }}
+          >
+            <Entypo name="shopping-cart" size={20} color={colours.primary} />
+            <Text
+              style={{
+                position: "absolute",
+                bottom: 15,
+                left: 30,
+                borderWidth: 1.5,
+                borderColor: colours.primary,
+                borderRadius: 40,
+                backgroundColor: colours.primary,
+                padding: 3,
+                textAlign: "center",
+                height: 22,
+                color: colours.bg,
+                fontWeight: "bold",
+              }}
+            >
+              {product.picks ? product.picks : 0}
+            </Text>
+          </TouchableOpacity>
         </View>
         <View>
           <Text
