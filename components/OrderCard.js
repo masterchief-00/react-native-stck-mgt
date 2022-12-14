@@ -8,13 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "@env";
 import axios from "axios";
 import { OrdersActions } from "../redux/OrderSlice";
+import { useIsFocused } from "@react-navigation/native";
 
 const OrderCard = ({ order }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [itemsCount, setItemsCount] = useState(0);
   const dispatch = useDispatch();
   const orderItems = useSelector((state) => state.order.orderItems);
   const token = useSelector((state) => state.user.token);
+  const isFocused = useIsFocused();
 
   let filtered_items = [];
 
@@ -28,7 +29,7 @@ const OrderCard = ({ order }) => {
         continue;
       }
     }
-    setItemsCount(i);
+    return i;
   };
 
   const fetchItems = async () => {
@@ -48,9 +49,10 @@ const OrderCard = ({ order }) => {
   };
 
   useEffect(() => {
-    fetchItems();
-    countItems(order.id);
-  }, []);
+    if (isFocused) {
+      fetchItems();
+    }
+  }, [isFocused]);
 
   return (
     <View
@@ -117,7 +119,7 @@ const OrderCard = ({ order }) => {
               marginBottom: 5,
             }}
           >
-            {itemsCount} item(s)
+            {countItems(order.id)} item(s)
           </Text>
           <Text
             style={{

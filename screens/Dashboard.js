@@ -12,11 +12,13 @@ import { useSelector } from "react-redux";
 import AddProduct from "../components/AddProduct";
 import UpdateProduct from "../components/UpdateProduct";
 import Cart from "../components/Cart";
+import CheckoutButton from "../components/CheckoutButton";
 
 const Dashboard = () => {
   const appTheme = useSelector((state) => state.theme.light);
   const userPermissions = useSelector((state) => state.user.userPermissions);
   const userType = useSelector((state) => state.user.userData.user_type);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   const [activeTab, setActiveTab] = useState("products");
 
@@ -87,14 +89,6 @@ const Dashboard = () => {
                 text="Add products"
               />
             )}
-
-            {findPermission("product:update") && (
-              <ServiceCard
-                onPress={() => setActiveTab("update_products")}
-                active={activeTab === "update_products" ? true : false}
-                text="Update products"
-              />
-            )}
           </ScrollView>
         </View>
 
@@ -102,8 +96,8 @@ const Dashboard = () => {
         {activeTab === "products" && <Products />}
         {activeTab === "orders" && <Shipping />}
         {activeTab === "add_products" && <AddProduct />}
-        {activeTab === "update_products" && <UpdateProduct />}
         {activeTab === "cart" && <Cart />}
+        {activeTab === "cart" && <CheckoutButton />}
       </View>
     </View>
   );

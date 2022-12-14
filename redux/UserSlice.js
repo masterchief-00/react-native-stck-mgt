@@ -47,6 +47,7 @@ const UserSlice = createSlice({
         image: null,
       };
       state.token = "";
+      state.userPermissions = [];
     },
   },
 });

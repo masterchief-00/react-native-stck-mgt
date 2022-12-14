@@ -4,6 +4,7 @@ const CartSlice = createSlice({
   name: "cart",
   initialState: {
     cartItems: [],
+    total: 0,
   },
   reducers: {
     addToCart(state, action) {
@@ -29,6 +30,14 @@ const CartSlice = createSlice({
       state.cartItems = state.cartItems.filter(
         (ele) => ele.id !== action.payload.id
       );
+    },
+    findTotal(state, action) {
+      if (state.cartItems.length > 0) {
+        for (let item of state.cartItems) {
+          let sub_total = item.unit_price * item.picks;
+          state.total += sub_total;
+        }
+      }
     },
     clearCart(state, action) {
       state.cartItems = [];

@@ -1,27 +1,29 @@
-import { useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 import { useSelector } from "react-redux";
-import product_img from "../assets/images/product-package.jpg";
 import { colours } from "../colours";
 
 const OrderItemCard = ({ data }) => {
   const products = useSelector((state) => state.product.products);
-  const categories = useSelector((state) => state.category.categories);
-  let product = null;
+  const [product, setProduct] = useState({});
+  const isFocused = useIsFocused();
 
   const findProduct = (product_id) => {
-    product = products.find((item) => item.id === product_id);
+    let element = products.find((item) => item.id === product_id);
+    setProduct(element);
   };
 
-  const findCategories = (category_id) => {
-    let category = categories.find((item) => item.id === category_id);
-
-    return category.name;
-  };
+  const productImage =
+    product.image !== null
+      ? { uri: product.image }
+      : require("../assets/images/product-package.jpg");
 
   useEffect(() => {
-    findProduct(data.product_id);
-  }, []);
+    if (isFocused) {
+      findProduct(data.product_id);
+    }
+  }, [isFocused]);
   return (
     <View
       style={{
@@ -33,7 +35,7 @@ const OrderItemCard = ({ data }) => {
       }}
     >
       <Image
-        source={product_img}
+        source={productImage}
         resizeMode="stretch"
         style={{
           height: 80,
@@ -58,6 +60,7 @@ const OrderItemCard = ({ data }) => {
           >
             {product.name}
           </Text>
+
           <Text
             style={{
               fontSize: 13,
@@ -67,7 +70,18 @@ const OrderItemCard = ({ data }) => {
               fontStyle: "italic",
             }}
           >
-            {findCategories(product.category_id)}
+            Picks: {data.quantity}
+          </Text>
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: "300",
+              opacity: 1,
+              color: colours.bg,
+              fontStyle: "italic",
+            }}
+          >
+            Unit price: ${product.unit_price}
           </Text>
         </View>
         <View>
@@ -78,7 +92,7 @@ const OrderItemCard = ({ data }) => {
               fontSize: 18,
             }}
           >
-            $690
+            ${data.total_price}
           </Text>
         </View>
       </View>

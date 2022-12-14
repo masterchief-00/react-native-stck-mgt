@@ -21,6 +21,11 @@ const ProductSlice = createSlice({
         (item) => item.category_id === action.payload
       );
     },
+    deleteProduct(state, action) {
+      state.products = state.products.filter(
+        (ele) => ele.id !== action.payload
+      );
+    },
     clearProducts(state, action) {
       state.products = [];
       state.filtered = [];

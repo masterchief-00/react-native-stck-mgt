@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "./ProductCard";
 import { API_URL } from "@env";
 import { ProductActions } from "../redux/ProductSlice";
+import { useIsFocused } from "@react-navigation/native";
 
 const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
   const filtered = useSelector((state) => state.product.filtered);
   const token = useSelector((state) => state.user.token);
+  const isFocused = useIsFocused();
 
   const fetchProducts = async () => {
     await axios({
@@ -29,8 +31,10 @@ const Products = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (isFocused) {
+      fetchProducts();
+    }
+  }, [isFocused]);
 
   return (
     <ScrollView

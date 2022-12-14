@@ -1,22 +1,50 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
-import product_img from "../assets/images/product-package.jpg";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { colours } from "../colours";
-import { AntDesign, Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
-import Modal_elite from "./Modal_elite";
+import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { CartActions } from "../redux/CartSlice";
+import axios from "axios";
+import { API_URL } from "@env";
+import { ProductActions } from "../redux/ProductSlice";
 
 const ProductCard = ({ product, cart = true }) => {
-  const [modalVisible, setModalVisible] = useState(false);
   const categories = useSelector((state) => state.category.categories);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const userRole = useSelector((state) => state.user.userData.user_type);
+  const [indicatorVisible, setIndicatorVisibility] = useState(false);
+  const token = useSelector((state) => state.user.token);
 
   const findCategories = (category_id) => {
     let category = categories.find((item) => item.id === category_id);
 
     return category.name;
+  };
+
+  const deleteProduct = async (id) => {
+    if (!cart && isAdmin) {
+      setIndicatorVisibility(true);
+
+      await axios({
+        method: "delete",
+        url: `${API_URL}/products/${id}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+
+            dispatch(ProductActions.deleteProduct(response.data.product.id));
+            setIndicatorVisibility(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setIndicatorVisibility(false);
+        });
+    } else if (!cart) {
+      dispatch(CartActions.removeItemFromCart({ id: product.id }));
+    }
   };
 
   const addItemToCart = (item) => {
@@ -29,6 +57,12 @@ const ProductCard = ({ product, cart = true }) => {
     return item ? item.picks : 0;
   };
 
+  const productImage =
+    product.image !== null
+      ? { uri: product.image }
+      : require("../assets/images/product-package.jpg");
+
+  const isAdmin = userRole === "ADM" || userRole === "WHS";
   return (
     <View
       style={{
@@ -40,7 +74,7 @@ const ProductCard = ({ product, cart = true }) => {
       }}
     >
       <Image
-        source={{ uri: product.image }}
+        source={productImage}
         resizeMode="stretch"
         style={{
           height: 80,
@@ -163,70 +197,21 @@ const ProductCard = ({ product, cart = true }) => {
           >
             ${product.unit_price}
           </Text>
-          {cart && (
-            <TouchableOpacity
-              onPress={() =>
-                dispatch(CartActions.removeItemFromCart({ id: product.id }))
-              }
-              style={{
-                marginTop: 10,
-                justifyContent: "center",
-              }}
-            >
-              <FontAwesome name="trash" size={24} color={colours.primary} />
-            </TouchableOpacity>
-          )}
+          {cart ||
+            (isAdmin && (
+              <TouchableOpacity
+                disabled={indicatorVisible}
+                onPress={() => deleteProduct(product.id)}
+                style={{
+                  marginTop: 10,
+                  justifyContent: "center",
+                }}
+              >
+                <FontAwesome name="trash" size={24} color={colours.primary} />
+              </TouchableOpacity>
+            ))}
         </View>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: colours.bg,
-            flex: 1,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              marginBottom: 40,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "100%",
-              paddingHorizontal: 30,
-              zIndex: 3,
-            }}
-          >
-            <Text
-              style={{
-                color: colours.primary_variant,
-                fontWeight: "bold",
-                fontSize: 25,
-                textTransform: "uppercase",
-              }}
-            >
-              Product details
-            </Text>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <AntDesign
-                name="closecircle"
-                size={35}
-                color={colours.primary_variant}
-              />
-            </TouchableOpacity>
-          </View>
-          <Modal_elite product_img={product_img} />
-        </View>
-      </Modal>
     </View>
   );
 };
